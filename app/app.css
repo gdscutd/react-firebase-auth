@@ -19,7 +19,48 @@ body {
 }
 
 :root {
-  --radius: 0.6rem;
+  --background: 32 100% 95%;
+  --foreground: 32 5% 0%;
+  --card: 32 50% 90%;
+  --card-foreground: 32 5% 10%;
+  --popover: 32 100% 95%;
+  --popover-foreground: 32 100% 0%;
+  --primary: 32 100% 50%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 32 30% 70%;
+  --secondary-foreground: 0 0% 0%;
+  --muted: -6 30% 85%;
+  --muted-foreground: 32 5% 35%;
+  --accent: -6 30% 80%;
+  --accent-foreground: 32 5% 10%;
+  --destructive: 0 100% 30%;
+  --destructive-foreground: 32 5% 90%;
+  --border: 32 30% 50%;
+  --input: 32 30% 18%;
+  --ring: 32 100% 50%;
+  --radius: 0.5rem;
+}
+.dark {
+  --background: 32 50% 5%;
+  --foreground: 32 5% 90%;
+  --card: 32 50% 0%;
+  --card-foreground: 32 5% 90%;
+  --popover: 32 50% 5%;
+  --popover-foreground: 32 5% 90%;
+  --primary: 32 100% 50%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 32 30% 10%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: -6 30% 15%;
+  --muted-foreground: 32 5% 60%;
+  --accent: -6 30% 15%;
+  --accent-foreground: 32 5% 90%;
+  --destructive: 0 100% 30%;
+  --destructive-foreground: 32 5% 90%;
+  --border: 32 30% 18%;
+  --input: 32 30% 18%;
+  --ring: 32 100% 50%;
+  --radius: 0.5rem;
 }
 
 @theme inline {
@@ -28,3 +69,13 @@ body {
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 }
+
+/*@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+*/
