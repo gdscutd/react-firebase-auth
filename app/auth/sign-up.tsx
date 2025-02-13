@@ -11,7 +11,11 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 
-//import { getAuth, createUserWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
+
+
+
+
+import { getAuth, createUserWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 
 import { z } from "zod";
 
@@ -26,6 +30,8 @@ const formSchema = z.object({
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { firebase_app } from "~/lib/config";
+
 
 const SignUp = () => {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -38,6 +44,21 @@ const SignUp = () => {
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
+    const auth = getAuth();
+
+    createUserWithEmailAndPassword(auth, values.email, values.password)
+    .then(()=>{
+      console.log("User created successfully in firebase!")
+    })
+    .catch((error)=>{
+      if (error.code === 'auth/email-already-in-use') {
+        console.log("Email already exists! ");
+    }
+    else{
+      console.log(error)
+    }
+    })
+
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
