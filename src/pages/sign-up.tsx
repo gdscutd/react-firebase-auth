@@ -3,7 +3,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import {getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider} from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -17,11 +21,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import GoogleButton from "@/components/GoogleButton";
-import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "@/lib/config";
+import { toast } from "sonner";
+import { firebaseAuth } from "@/lib/config";
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth();
+const auth = firebaseAuth;
 
 const SigninValidation = z.object({
   email: z.string().email({
@@ -44,33 +47,33 @@ const SignUpForm = () => {
   });
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof SigninValidation>) {
-    
-    createUserWithEmailAndPassword(auth,values.email, values.password)
-    .then(()=>{
-      console.log("User created successfully in firebase")
-    })
-    .catch((error)=>{
-      if (error.code === 'auth/email-already-in-use') {
-        console.log("Email already exists! ");
-    }
-    else{
-      console.log(error)
-    }
-    })
+    createUserWithEmailAndPassword(auth, values.email, values.password)
+      .then(() => {
+        console.log("User created successfully in firebase");
+        toast.success("User created successfully in firebase");
+      })
+      .catch((error) => {
+        if (error.code === "auth/email-already-in-use") {
+          console.log("Email already exists! ");
+          toast.error("Email already exists! ");
+        } else {
+          console.log(error);
+          toast.error(error);
+        }
+      });
     console.log(values);
   }
   const onGoogleSignIn = () => {
-
     const provider = new GoogleAuthProvider();
 
     signInWithPopup(auth, provider)
-    .then(()=>{
-      console.log("Google sign-in successful")
-    })
-    .catch((error)=>{
-      console.log(error);
-    })
-  }
+      .then(() => {
+        console.log("Google sign-in successful");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   return (
     <div className="flex flex-1 items-center justify-center overflow-x-">
       <div className="">
@@ -120,7 +123,7 @@ const SignUpForm = () => {
                 Sign up
               </Button>
 
-              <GoogleButton onClick={onGoogleSignIn}/>
+              <GoogleButton onClick={onGoogleSignIn} />
               <p className="text-small-regular mt-2 text-center text-light-2">
                 Already have an account?{" "}
                 <Link

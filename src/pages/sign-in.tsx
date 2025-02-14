@@ -3,9 +3,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { firebaseConfig } from "@/lib/config";
+import {
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,9 +21,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import GoogleButton from "@/components/GoogleButton";
+import { toast } from "sonner";
+import { firebaseAuth } from "@/lib/config";
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth();
+const auth = firebaseAuth;
 
 const SigninValidation = z.object({
   email: z.string().email({
@@ -44,27 +47,30 @@ const SignInForm = () => {
   });
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof SigninValidation>) {
-
     signInWithEmailAndPassword(auth, values.email, values.password)
-    .then(()=>{
-      console.log("User signed in successfully");
-    })
-    .catch((error)=>{
-      console.log(error);
-    })
+      .then(() => {
+        console.log("User signed in successfully");
+        toast.success("User signed in successfully");
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("User signed in failed");
+      });
     console.log(values);
   }
   const onGoogleSignIn = () => {
-      const provider = new GoogleAuthProvider();
-  
-      signInWithPopup(auth, provider)
-      .then(()=>{
-        console.log("Google sign-in successful")
+    const provider = new GoogleAuthProvider();
+
+    signInWithPopup(auth, provider)
+      .then(() => {
+        console.log("Google sign-in successful");
+        toast.success("Google sign-in successful");
       })
-      .catch((error)=>{
+      .catch((error) => {
         console.log(error);
-      })
-    }
+        toast.error("Google sign-in failed");
+      });
+  };
   return (
     <div className="flex flex-1 items-center justify-center overflow-x-">
       <div className="">
@@ -114,7 +120,7 @@ const SignInForm = () => {
                 Sign in
               </Button>
 
-              <GoogleButton onClick={onGoogleSignIn}/>
+              <GoogleButton onClick={onGoogleSignIn} />
               <p className="text-small-regular mt-2 text-center text-light-2">
                 Don't have an account?{" "}
                 <Link

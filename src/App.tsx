@@ -19,7 +19,16 @@ const App = () => {
         </Route>
       </Routes>
 
-      <Toaster />
+      <Toaster
+        toastOptions={{
+          classNames: {
+            error: "bg-red-500",
+            success: "bg-green-500",
+            warning: "bg-yellow-500",
+            info: "bg-blue-500",
+          },
+        }}
+      />
     </main>
   );
 };
