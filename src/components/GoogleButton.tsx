@@ -1,5 +1,5 @@
 import { Button } from "./ui/button";
-import google from "../../public/google.png";
+import google from "/google.png";
 
 const GoogleButton = () => {
   const handleGoogleLogin = () => {};
