@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import {getAuth, createUserWithEmailAndPassword} from "firebase/auth";
+import {getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider} from "firebase/auth";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +20,8 @@ import GoogleButton from "@/components/GoogleButton";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "@/lib/config";
 
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
 
 const SigninValidation = z.object({
   email: z.string().email({
@@ -43,8 +45,6 @@ const SignUpForm = () => {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof SigninValidation>) {
     
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth();
     createUserWithEmailAndPassword(auth,values.email, values.password)
     .then(()=>{
       console.log("User created successfully in firebase")
@@ -58,6 +58,18 @@ const SignUpForm = () => {
     }
     })
     console.log(values);
+  }
+  const onGoogleSignIn = () => {
+
+    const provider = new GoogleAuthProvider();
+
+    signInWithPopup(auth, provider)
+    .then(()=>{
+      console.log("Google sign-in successful")
+    })
+    .catch((error)=>{
+      console.log(error);
+    })
   }
   return (
     <div className="flex flex-1 items-center justify-center overflow-x-">
@@ -105,10 +117,10 @@ const SignUpForm = () => {
                 )}
               />
               <Button type="submit" className="shad-button_primary">
-                Sign in
+                Sign up
               </Button>
 
-              <GoogleButton />
+              <GoogleButton onClick={onGoogleSignIn}/>
               <p className="text-small-regular mt-2 text-center text-light-2">
                 Already have an account?{" "}
                 <Link
