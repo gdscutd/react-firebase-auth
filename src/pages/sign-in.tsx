@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { firebaseConfig } from "@/lib/config";
 
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import GoogleButton from "@/components/GoogleButton";
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
 
 const SigninValidation = z.object({
   email: z.string().email({
@@ -42,9 +45,6 @@ const SignInForm = () => {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof SigninValidation>) {
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth();
-
     signInWithEmailAndPassword(auth, values.email, values.password)
     .then(()=>{
       console.log("User signed in successfully");
@@ -54,6 +54,17 @@ const SignInForm = () => {
     })
     console.log(values);
   }
+  const onGoogleSignIn = () => {
+      const provider = new GoogleAuthProvider();
+  
+      signInWithPopup(auth, provider)
+      .then(()=>{
+        console.log("Google sign-in successful")
+      })
+      .catch((error)=>{
+        console.log(error);
+      })
+    }
   return (
     <div className="flex flex-1 items-center justify-center overflow-x-">
       <div className="">
@@ -103,14 +114,7 @@ const SignInForm = () => {
                 Sign in
               </Button>
 
-              {/*<Button
-          type="button"
-          onClick={onGoogleSignIn}
-          className="bg-white text-black"
-        >
-          Sign in with Google
-        </Button>*/}
-              <GoogleButton />
+              <GoogleButton onClick={onGoogleSignIn}/>
               <p className="text-small-regular mt-2 text-center text-light-2">
                 Don't have an account?{" "}
                 <Link
