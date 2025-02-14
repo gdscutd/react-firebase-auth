@@ -1,9 +1,8 @@
 import { Button } from "./ui/button";
 import google from "/google.png";
 
-const GoogleButton = () => {
-  const handleGoogleLogin = () => {};
-
+const GoogleButton = ({onClick}: {onClick:() => void}) => {
+  
   return (
     <div>
       <div className="mt-4 flex flex-row items-center justify-center gap-x-3">
@@ -15,7 +14,7 @@ const GoogleButton = () => {
         className="mt-5 w-full"
         variant={"outline"}
         type="button"
-        onClick={handleGoogleLogin}
+        onClick={onClick}
       >
         <img src={google} alt="Google" className="mx-2 h-5 w-5" />
         Sign in with Google
