@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import {getAuth, createUserWithEmailAndPassword} from "firebase/auth";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -16,6 +17,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import GoogleButton from "@/components/GoogleButton";
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from "@/lib/config";
+
 
 const SigninValidation = z.object({
   email: z.string().email({
@@ -38,6 +42,21 @@ const SignUpForm = () => {
   });
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof SigninValidation>) {
+    
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+    createUserWithEmailAndPassword(auth,values.email, values.password)
+    .then(()=>{
+      console.log("User created successfully in firebase")
+    })
+    .catch((error)=>{
+      if (error.code === 'auth/email-already-in-use') {
+        console.log("Email already exists! ");
+    }
+    else{
+      console.log(error)
+    }
+    })
     console.log(values);
   }
   return (

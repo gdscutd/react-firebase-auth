@@ -3,6 +3,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { initializeApp } from "firebase/app";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { firebaseConfig } from "@/lib/config";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -38,6 +41,17 @@ const SignInForm = () => {
   });
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof SigninValidation>) {
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+
+    signInWithEmailAndPassword(auth, values.email, values.password)
+    .then(()=>{
+      console.log("User signed in successfully");
+    })
+    .catch((error)=>{
+      console.log(error);
+    })
     console.log(values);
   }
   return (
