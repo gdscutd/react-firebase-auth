@@ -69,22 +69,6 @@ const SignUpForm = () => {
       });
     console.log(values);
   }
-  const onGoogleSignIn = () => {
-    const provider = new GoogleAuthProvider();
-
-    signInWithPopup(firebaseAuth, provider)
-      .then(() => {
-        console.log("Google sign-in successful");
-        toast.success("Google sign-in successful");
-        navigate("/profile");
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error("Google sign-in failed", {
-          description: error.message,
-        });
-      });
-  };
   return (
     <div className="flex flex-1 items-center justify-center overflow-x-">
       <div className="">
@@ -134,7 +118,7 @@ const SignUpForm = () => {
                 Sign up
               </Button>
 
-              <GoogleButton onClick={onGoogleSignIn} />
+              <GoogleButton />
               <p className="text-small-regular mt-2 text-center text-light-2">
                 Already have an account?{" "}
                 <Link
