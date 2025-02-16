@@ -70,10 +70,13 @@ const SignInForm = () => {
       .then(() => {
         console.log("Google sign-in successful");
         toast.success("Google sign-in successful");
+        navigate("/profile");
       })
       .catch((error) => {
         console.log(error);
-        toast.error("Google sign-in failed");
+        toast.error("Google sign-in failed", {
+          description: error.message,
+        });
       });
   };
   return (
