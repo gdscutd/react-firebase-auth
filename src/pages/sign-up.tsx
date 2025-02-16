@@ -19,7 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import GoogleButton from "@/components/GoogleButton";
 import { toast } from "sonner";
 import { firebaseAuth } from "@/lib/config";
@@ -36,6 +36,8 @@ const SigninValidation = z.object({
 });
 
 const SignUpForm = () => {
+  const navigate = useNavigate();
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof SigninValidation>>({
     resolver: zodResolver(SigninValidation),
@@ -51,14 +53,19 @@ const SignUpForm = () => {
       .then(() => {
         console.log("User created successfully in firebase");
         toast.success("User created successfully in firebase");
+        navigate("/sign-in");
       })
       .catch((error) => {
         if (error.code === "auth/email-already-in-use") {
           console.log("Email already exists! ");
-          toast.error("Email already exists! ");
+          toast.error("Sign up failed", {
+            description: "Email already exists!",
+          });
         } else {
           console.log(error);
-          toast.error(error);
+          toast.error("Sign up failed", {
+            description: error.message,
+          });
         }
       });
     console.log(values);

@@ -6,6 +6,7 @@ import SignInForm from "./pages/sign-in";
 import SignUpForm from "./pages/sign-up";
 import Profile from "./pages/profile";
 import { Toaster } from "sonner";
+import Protected from "./components/Protected";
 
 const App = () => {
   return (
@@ -14,21 +15,19 @@ const App = () => {
         <Route element={<RootLayout />}>
           <Route path="/sign-in" element={<SignInForm />} />
           <Route path="/sign-up" element={<SignUpForm />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route
+            path="/profile"
+            element={
+              <Protected>
+                <Profile />
+              </Protected>
+            }
+          />
           <Route path="*" element={<Navigate to="sign-in" replace />} />
         </Route>
       </Routes>
 
-      <Toaster
-        toastOptions={{
-          classNames: {
-            error: "bg-red-500",
-            success: "bg-green-500",
-            warning: "bg-yellow-500",
-            info: "bg-blue-500",
-          },
-        }}
-      />
+      <Toaster richColors />
     </main>
   );
 };
