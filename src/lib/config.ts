@@ -3,6 +3,7 @@ import { getAuth } from "firebase/auth";
 
 const apiKey = import.meta.env.VITE_FIREBASE_KEY;
 
+
 export const firebaseConfig = {
   apiKey: apiKey,
   authDomain: "gdsc-workshop-6507d.firebaseapp.com",

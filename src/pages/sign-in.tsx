@@ -24,7 +24,6 @@ import GoogleButton from "@/components/GoogleButton";
 import { toast } from "sonner";
 import { firebaseAuth } from "@/lib/config";
 
-const auth = firebaseAuth;
 
 const SigninValidation = z.object({
   email: z.string().email({
@@ -49,7 +48,7 @@ const SignInForm = () => {
   });
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof SigninValidation>) {
-    signInWithEmailAndPassword(auth, values.email, values.password)
+    signInWithEmailAndPassword(firebaseAuth, values.email, values.password)
       .then(() => {
         console.log("User signed in successfully");
         toast.success("User signed in successfully");
@@ -66,7 +65,7 @@ const SignInForm = () => {
   const onGoogleSignIn = () => {
     const provider = new GoogleAuthProvider();
 
-    signInWithPopup(auth, provider)
+    signInWithPopup(firebaseAuth, provider)
       .then(() => {
         console.log("Google sign-in successful");
         toast.success("Google sign-in successful");
