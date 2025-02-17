@@ -3,9 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import {
-  createUserWithEmailAndPassword
-} from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -22,7 +20,6 @@ import GoogleButton from "@/components/GoogleButton";
 import { toast } from "sonner";
 import { firebaseAuth } from "@/lib/config";
 
-
 const SigninValidation = z.object({
   email: z.string().email({
     message: "Email must be a valid email.",
@@ -33,9 +30,15 @@ const SigninValidation = z.object({
 });
 
 const SignUpForm = () => {
+  // 1. Get the navigate function from the react-router-dom package. This
+  // allows us to navigate the user to another page.
   const navigate = useNavigate();
 
-  // 1. Define your form.
+  // 2. Define the form using the useForm hook from the react-hook-form package.
+  // The form will have two fields: email and password. The email field is
+  // required and must be a valid email address. The password field is required
+  // and must be at least 8 characters long. The form will also validate the
+  // fields on every change.
   const form = useForm<z.infer<typeof SigninValidation>>({
     resolver: zodResolver(SigninValidation),
     defaultValues: {
@@ -44,7 +47,14 @@ const SignUpForm = () => {
     },
     mode: "onChange",
   });
-  // 2. Define a submit handler.
+
+  // 3. Define a submit handler for the form. When the form is submitted, we
+  // call the createUserWithEmailAndPassword function from the firebase/auth
+  // package with the email and password fields as arguments.
+  // If the sign up is successful, we log a success message to the console,
+  // display a success toast with a message, and navigate to the Sign in page.
+  // If the sign up fails, we log an error message to the console, display an
+  // error toast with the error message, and stay on the same page.
   async function onSubmit(values: z.infer<typeof SigninValidation>) {
     createUserWithEmailAndPassword(firebaseAuth, values.email, values.password)
       .then(() => {
@@ -67,6 +77,8 @@ const SignUpForm = () => {
       });
     console.log(values);
   }
+
+  // 4. Render the form.
   return (
     <div className="flex flex-1 items-center justify-center overflow-x-">
       <div className="">
@@ -86,6 +98,8 @@ const SignUpForm = () => {
                 control={form.control}
                 name="email"
                 render={({ field }) => (
+                  // The email field is a required field and must be a valid
+                  // email address.
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
@@ -99,6 +113,8 @@ const SignUpForm = () => {
                 control={form.control}
                 name="password"
                 render={({ field }) => (
+                  // The password field is a required field and must be at
+                  // least 8 characters long.
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
@@ -127,9 +143,6 @@ const SignUpForm = () => {
                 </Link>
               </p>
             </form>
-            {/*<div className="mt-5">
-        <GoogleButton onClick={onGoogleSignIn} type="dark" />
-      </div>*/}
           </div>
         </Form>
       </div>
